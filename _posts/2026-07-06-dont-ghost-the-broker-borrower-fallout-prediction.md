@@ -13,9 +13,9 @@ This project focused on a real business problem for Noble Equity:
 
 **Which commercial mortgage borrowers are likely to pay the application fee, and which borrowers are likely to disappear before moving forward?**
 
-In a commercial lending business, lead volume alone is not enough. A company can receive many borrower applications, but if those borrowers do not pay, submit documents, or continue through the process, the sales team wastes time chasing weak leads.
+In commercial lending, lead volume alone is not enough. A company can receive many borrower applications, but if those borrowers do not pay, submit documents, or continue through the process, the sales team wastes time chasing weak leads.
 
-The goal of this project was to build a borrower fallout prediction model that helps Noble Equity separate serious borrowers from borrowers who are more likely to drop out.
+The goal of this project was to build a borrower-fallout prediction model that helps Noble Equity distinguish serious borrowers from those more likely to drop out.
 
 In simple terms, the model helps answer:
 
@@ -27,7 +27,7 @@ In simple terms, the model helps answer:
 
 Noble Equity had borrower application data and payment data. The application data showed who submitted loan information. The payment data showed who actually paid the application fee.
 
-The business issue was that many borrowers started the process but did not complete the next serious step: payment.
+The business issue was that many borrowers began the process but did not take the next serious step: making a payment.
 
 That created a clear business problem:
 
@@ -145,10 +145,13 @@ The original liquidity column stayed in the dataset for reference, but the model
 
 ```python
 import pandas as pd
+import numpy as np
+import re
 import joblib
 
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import OneHotEncoder
+from sklearn.preprocessing import OneHotEncoder, StandardScaler
+from sklearn.impute import KNNImputer
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
 ```
@@ -286,11 +289,11 @@ joblib.dump(
 
 ## Key Discoveries
 
-The model showed that borrower fallout can be studied through patterns in application data.
+The model demonstrated that borrower fallout can be analyzed by examining patterns in application data. Testing found that loan amount and credit score were t Liquidity, annual income, and years in business each accounted for 40% of borrower fallouts. 
 
 Instead of guessing which leads are serious, Noble Equity can use the model to estimate dropout risk.
 
-The model used borrower financial strength, deal type, property type, geography, and financing request details to produce a dropout probability.
+The model used borrower financial strength, deal type, property type, geography, and financing request details to also factor in a dropout probability score.
 
 A dropout probability is more useful than a simple yes-or-no answer.
 
