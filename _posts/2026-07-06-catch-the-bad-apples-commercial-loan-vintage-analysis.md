@@ -13,9 +13,9 @@ This project focused on one simple business question:
 
 **Which groups of commercial loans are starting to perform badly, and can we spot the warning signs earlier?**
 
-In commercial lending, lenders do not only care about whether one loan is good or bad. They also care about **loan vintages**. A loan vintage is a group of loans that started around the same time. If one batch of loans begins showing higher losses than the others, the lender needs to know why.
+In commercial lending, lenders do not care only about whether a loan is good or bad. They also care about **loan vintages**. A loan vintage is a group of loans that started around the same time. If one batch of loans begins showing higher losses than the others, the lender needs to know why.
 
-For this project, I built a machine learning model that predicts **Net Loss Percentage** across commercial loan records. The goal was to help a lender identify borrower, credit, and portfolio signals connected to higher loan losses.
+For this project, I built a machine learning model to predict **Net Loss Percentage** from commercial loan records. The goal was to help a lender identify borrower, credit, and portfolio signals connected to higher loan losses.
 
 In simple terms, this model helps answer:
 
@@ -25,7 +25,7 @@ In simple terms, this model helps answer:
 
 ## Business Problem
 
-Commercial lenders can lose money when weak loans are found too late. A borrower may look fine at origination, but later the loan can weaken because of revenue drops, higher credit utilization, seasoning, borrower risk changes, or industry stress.
+Commercial lenders can lose money when weak loans are found too late. A borrower may look fine at origination, but later the loan can weaken due to revenue declines, higher credit utilization, seasoning, changes in borrower risk, or industry stress.
 
 The business problem was to create a model that could help lenders:
 
@@ -41,7 +41,7 @@ This is important because a lender does not want to wait until a loan fully defa
 
 ## Dataset Used
 
-The project used a synthetic commercial loan vintage dataset with loan-level and borrower-level information.
+The project used an AI-generated dataset of commercial loan vintages with loan- and borrower-level information.
 
 The dataset included columns such as:
 
@@ -66,13 +66,14 @@ The target column was:
 Net_Loss_Pct
 ```
 
-That means the model was trained to predict the percentage of loss connected to each loan record.
+That means the model was trained to predict the percentage loss associated with each loan record.
 
 ---
 
 ## Tools Used
 
 * Python
+* ChatGPT 
 * Pandas
 * NumPy
 * Scikit-learn
@@ -90,15 +91,15 @@ Before training the model, I cleaned and prepared the data so the model could un
 
 The main preparation steps were:
 
-1. Loaded the commercial loan vintage dataset
+1. Loaded the AI-generated commercial loan vintage dataset
 2. Checked rows, columns, and missing values
 3. Removed ID columns that should not be used for prediction
 4. Removed raw date columns that caused model errors
 5. Converted categorical fields like `Industry_Sector` into numeric dummy variables
 6. Split the data into `X` features and `y` target
-7. Used train/test split to test the model fairly
+7. Used a train/test split to test the model fairly
 
-One important lesson from this project was that raw date columns and ID columns can break a model or mislead it. The model should learn from business features, not from meaningless identifiers.
+One important lesson from this project was that raw date and ID columns can break or mislead a model. The model should learn from business features, not from meaningless identifiers.
 
 ---
 
@@ -311,14 +312,14 @@ The model was useful because it showed that commercial loan losses are not rando
 
 The most important warning signs to monitor were:
 
-* **Revenue deterioration** - borrowers with major revenue drops were more likely to show loss pressure.
+* **Revenue deterioration** - borrowers with major revenue drops were more likely to show loss pressure, possibly due to stressful situations.
 * **Credit utilization spikes** - borrowers using more available credit may be under financial stress.
 * **Loan seasoning** - loans can behave differently depending on how many months they have been active.
 * **Current balance exposure** - larger remaining balances can create larger portfolio risk.
 * **Internal risk rating** - higher-risk borrower ratings can help explain future loss behavior.
 * **Industry sector** - some industries may show more weakness than others during stressed periods.
 
-The main discovery was that lenders can use predictive analytics to catch weak loan batches before the losses fully show up.
+The main discovery was that lenders can use predictive analytics to identify weak loan batches before losses fully materialize.
 
 ---
 
@@ -361,6 +362,7 @@ If this project were expanded, I would add:
 4. Delinquency history
 5. Vintage-level dashboard visuals
 6. Probability bands for low, medium, and high loss risk
+7. Accuracy scoring, using real data sets for better authenticity 
 
 This would make the model even more useful for real-world portfolio management.
 
@@ -371,7 +373,3 @@ This would make the model even more useful for real-world portfolio management.
 ![Commercial Loan Vintage Analysis](/img/posts/commercial_loan_vintage_bad_apples.png "Catch The Bad Apples - Commercial Loan Vintage Analysis")
 
 ---
-
-## Short Resume Version
-
-Built a commercial loan vintage performance model using Python, Pandas, and Random Forest Regression to identify borrower and portfolio characteristics associated with higher net loss percentages across loan origination periods. The model analyzed risk signals such as revenue deterioration, utilization spikes, internal risk ratings, loan seasoning, industry sector, and current balance exposure to explain poor-performing loan batches and support earlier credit monitoring.
