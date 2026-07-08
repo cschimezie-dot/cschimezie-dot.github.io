@@ -290,6 +290,8 @@ joblib.dump(
 
 ## Key Discoveries
 
+<img width="826" height="205" alt="Screenshot 2026-07-08 at 3 15 28 PM" src="https://github.com/user-attachments/assets/aebe7087-8b52-447d-87c1-195bcd897c66" />
+
 The model demonstrated that borrower fallout can be analyzed by examining patterns in application data. Testing found that loan amount and credit score were t Liquidity, annual income, and years in business each accounted for 40.03% of borrower fallouts. 9.72% for requested loan amount, 8.35% for credit, 8.38% for liquidity, 8.27% for income, and 6.86% for years in business. Our model achieved an accuracy of 85% using the F1 score metric and confusion matrix. See below.
 
 ## Feature Importance Report
