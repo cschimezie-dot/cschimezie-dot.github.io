@@ -343,7 +343,6 @@ Accuracy gap: 0.0878
 ## Confusion Matrix Model 1
 <img width="1042" height="849" alt="image" src="https://github.com/user-attachments/assets/d56a1aa1-7a56-4e32-ba9b-4f3d4b224942" />
 
-## Confusion Matrix Model 2 (Unable to get this to Print)
 [[  0  19]
  [  6 153]]
 [0, 0] = Actual Paid, Predicted Paid
