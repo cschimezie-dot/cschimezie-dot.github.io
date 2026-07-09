@@ -15,7 +15,7 @@ This project focused on a real business problem for Noble Equity:
 
 In commercial lending, lead volume alone is not enough. A company can receive many borrower applications, but if those borrowers do not pay, submit documents, or continue through the process, the sales team wastes time chasing weak leads. It was very frustrating for mortgage sales reps to not go home without a paycheck.
 
-The goal of this project was to build a borrower-fallout prediction model that helps Noble Equity distinguish serious borrowers from those more likely to drop out. 
+The goal of this project was to build a borrower-fallout prediction model that helps Noble Equity distinguish serious borrowers from those more likely to drop out, and to develop a user-friendly web application so stakeholders and clients can use and vet borrowers in their free time, saving the tech headaches and the time required to open a computer. 
 
 In simple terms, the model helps answer:
 
@@ -362,24 +362,24 @@ The main value is that Noble Equity can use data to decide which borrowers deser
 
 ---
 
-## Final Summary
+## Final Summary and Limitations 
 
 This project built a Random Forest Classification model to predict borrower fallout for Noble Equity.
 
-The model connected borrower application data to payment outcomes, cleaned messy borrower fields, handled missing values and outliers, and created dropout probability scores.
+The model connected borrower application data to payment outcomes, cleaned messy borrower fields, handled missing values and outliers, and created dropout probability scores. However, we may not have had enough borrowers to obtain an accurate sample of the full population we intended to study. Several lending firms process thousands of loans each month, while a small brokerage like Noble Equity was limited in the number of clients, loan officers, and marketing resources available to collect sufficient data. 
 
 In plain English, this project helps Noble Equity answer:
 
 > "Which borrowers are serious, and which borrowers are likely to disappear before paying?"
 
 That makes the project useful for lead scoring, borrower prioritization, sales follow-up, and commercial mortgage pipeline management.
-We will take further action in focusing 
-
+We will take further action to focus on increasing marketing for our ideal clients so we can collect more data and stress-test the model.
 
 
 
 ---
 
-## Portfolio Image
+## User-friendly web application!
 
-![Borrower Fallout Prediction](/img/posts/borrower_fallout_title_image.jpg "Don’t Ghost The Broker - Borrower Fallout Prediction")
+![Borrower Fallout Prediction](<img width="861" height="980" alt="Screenshot 2026-07-08 at 11 01 19 PM" src="https://github.com/user-attachments/assets/45fc5300-6cbf-4f87-a507-fda4c3d1a0f4" />
+")
