@@ -9,17 +9,21 @@ tags: [Python, Pandas, Machine Learning, Random Forest, Commercial Lending, Lead
 
 ## Project Overview
 
-This project focused on a real business problem for Noble Equity:
+This project focused on a real business problem for Noble Equity, which answers:
 
-**Which commercial mortgage borrowers are likely to pay the application fee, and which borrowers are likely to disappear before moving forward?**
+** "Which commercial mortgage borrowers are likely to pay the application fee, and which borrowers are likely to disappear before moving forward based on previous application fee payments?" ****
 
 In commercial lending, lead volume alone is not enough. A company can receive many borrower applications, but if those borrowers do not pay, submit documents, or continue through the process, the sales team wastes time chasing weak leads. It was very frustrating for mortgage sales reps to not go home without a paycheck.
 
-The goal of this project was to build a borrower-fallout prediction model that helps Noble Equity distinguish serious borrowers from those more likely to drop out, and to develop a user-friendly web application so stakeholders and clients can use and vet borrowers in their free time, saving the tech headaches and the time required to open a computer. 
+The goal of this project was to build a borrower-fallout prediction model that helps Noble Equity distinguish serious borrowers from non-serious borrowers, and develop a user-friendly web application so stakeholders and clients can use and vet borrowers in their free time, saving the tech headaches and the time required to open a computer. 
 
-In simple terms, the model helps answer:
+In simple terms, the model helps answer the sales team:
 
 > "Which borrowers are worth follow-up, and which borrowers are more likely to ghost the broker?"
+
+Answers to stakeholders:
+
+> "How should we position our next steps, and KPI's? and marketing reallocation "
 
 ---
 
@@ -27,14 +31,17 @@ In simple terms, the model helps answer:
 
 Noble Equity had borrower application data and payment data. The application data showed who submitted loan information. The payment data showed who actually paid the application fee.
 
-The business issue was that many borrowers began the process but did not take the next serious step: making a payment.
+The business issue was that 80% of borrowers began the process but did not take the next serious step: making a payment.
+
+<img width="386" height="88" alt="Screenshot 2026-07-09 at 5 19 27 PM" src="https://github.com/user-attachments/assets/af910883-ec9f-4dbd-9a11-5b08572d6165" />
+
 
 That created a clear business problem:
 
 * Some borrowers apply but do not pay
 * Sales time gets wasted on weak leads
 * Strong borrowers are harder to prioritize
-* The business needs a better way to rank lead quality
+* Our business decided a better way to rank lead quality
 * The team needs a repeatable system for spotting dropout risk
 
 This project turned that problem into a machine learning classification task.
@@ -92,21 +99,26 @@ The raw application data had messy values such as:
 * Removed Dollar signs
 * Merged data sets from different application software. 
 * Commas
+* Outlier Handling
 * Text inside money fields
 * Missing values
 * Unknown values
 * Monthly income formats
 * Unrealistic outliers
 * Different spellings and formats for categories
+* Used Codex CL to optimize the dataset further by standardizing categorical variables, like changing state classification to region, for better prediction.
+* Changing all the loan types from Primary and Unknown to Investment Only
+* Standardized the property types to a few categories; for example, Single F to Single Family or unique property types like RV park to Unique Property Types
+  
 
-I cleaned the key numeric fields so the model could read them as numbers:
+I cleaned and encoded the key numeric fields so the model could read them as numbers:
 
 * `requested_loan_amount`
 * `credit_score`
 * `liquidity`
 * `annual_income`
 
-I also used KNN imputation to fill in missing numeric values by using similar borrowers, since the dataset of paid borrowers was too small to remove. It would hurt the data.
+I also used KNN imputation to fill in missing numeric values by using similar borrowers, since the dataset of paid borrowers was too small to remove. It would hurt the data. On the Data Frames, you'll spot all the encoded columns.
 
 This matters because a machine learning model cannot reliably predict from messy borrower responses.
 
@@ -114,15 +126,13 @@ This matters because a machine learning model cannot reliably predict from messy
 
 ## Outlier Handling
 
-The liquidity column had some very large outliers. If those values were left untouched, the model could treat those extreme borrowers as more important than they really were.
+I chose not to remove them but to fill them with K-nearest neighbors, or KNN. I did not want to reduce the dataset's quantity; we are a small company. The liquidity column had some very large outliers. If those values were left untouched, the model could treat those extreme borrowers as more important than they really were.
 
-To solve that, I created a safer modeling column:
+To address that, I decided to create a safer modeling column called liquidity_capped so the model would know where we draw the line. This resulted in safer predictions for the model. 
 
 ```text
 liquidity_capped
 ```
-
-This kept normal liquidity values the same but limited extreme values above the cap.
 
 The original liquidity column stayed in the dataset for reference, but the model used `liquidity_capped` because it was safer for prediction.
 
@@ -138,6 +148,7 @@ The original liquidity column stayed in the dataset for reference, but the model
 * Random Forest Classification
 * Train/Test Split
 * Feature Importance
+* Confusion Matrix 
 * Joblib model saving
 
 ---
@@ -289,12 +300,18 @@ joblib.dump(
 ---
 
 ## Key Discoveries
-
+## Before AI
 <img width="826" height="205" alt="Screenshot 2026-07-08 at 3 15 28 PM" src="https://github.com/user-attachments/assets/aebe7087-8b52-447d-87c1-195bcd897c66" />
+## After AI Enhancement
+<img width="600" height="239" alt="Screenshot 2026-07-09 at 4 48 46 PM" src="https://github.com/user-attachments/assets/cf50b6c0-14ed-4e7e-b2cf-e27303f1491a" />
 
-The model demonstrated that borrower fallout can be analyzed by examining patterns in application data. Testing found that loan amount and credit score were t Liquidity, annual income, and years in business each accounted for 40.03% of borrower fallouts. 9.72% for requested loan amount, 8.35% for credit, 8.38% for liquidity, 8.27% for income, and 6.86% for years in business. Our model achieved an accuracy of 85% using the F1 score metric and confusion matrix. See below.
+So after running everything. The first model found that loan amount, credit score, liquidity, and annual income accounted for 40% of borrower dropouts. 12% for the requested loan amount, 10.80% for credit, 10.81% for liquidity, and 10.13% for income. This model achieved an accuracy of about 85% using the F1 score and a confusion matrix. See below; I left that there so you can see. I also ran another model with AI to optimize more items that I thought could have influenced the prediction results. Because I did get alot of overfitting, meaning data leaks, I wanted to make sure the model was properly rinsed.  
 
-## Feature Importance Report
+Final Training accuracy: 0.9474
+Final Testing accuracy: 0.8596
+Accuracy gap: 0.0878
+
+## Feature Importance Report Before AI Enhancement ( Model 1)
               precision    recall  f1-score   support
 
            0       0.00      0.00      0.00        15
@@ -304,22 +321,35 @@ The model demonstrated that borrower fallout can be analyzed by examining patter
    macro avg       0.45      0.50      0.47       144
 weighted avg       0.80      0.90      0.85       144
 
-## Confusion Matrix
+## Feature Importance Report After AI Enhancement ( Model 2)
+              precision    recall  f1-score   support
+
+           0       0.00      0.00      0.00        19
+           1       0.89      0.96      0.92       159
+
+    accuracy                           0.86       178
+   macro avg       0.44      0.48      0.46       178
+weighted avg       0.79      0.86      0.83       178
+
+Final Training accuracy: 0.9474
+Testing accuracy: 0.8596
+Accuracy gap: 0.0878
+
+
+## Confusion Matrix Model 1
 <img width="1042" height="849" alt="image" src="https://github.com/user-attachments/assets/d56a1aa1-7a56-4e32-ba9b-4f3d4b224942" />
 
-This means instead of guessing which leads are serious, Noble Equity can use an accurate predictor model to estimate dropout risk.
+## Confusion Matrix Model 2 (Unable to get this to Print)
+[[  0  19]
+ [  6 153]]
+[0, 0] = Actual Paid, Predicted Paid
+[0, 1] = Actual Paid, Predicted Dropped Out
+[1, 0] = Actual Dropped Out, Predicted Paid
+[1, 1] = Actual Dropped Out, Predicted Dropped Out
 
-The model used borrower financial strength, deal type, property type, geography, and financing request details to also factor in a dropout probability score.
+This means that instead of guessing which leads are serious, Noble Equity can assign a reliable predictive rating or score next to each borrower lead as it enters their pipeline, so they can prioritize their leads! (See data Frame below) 
 
-A dropout probability is more useful than a simple yes-or-no answer.
-
-For example:
-
-```text
-82% dropout probability
-```
-
-means the borrower has a high estimated chance of not moving forward.
+<img width="733" height="187" alt="Screenshot 2026-07-09 at 5 57 04 PM" src="https://github.com/user-attachments/assets/40e6546f-b4a3-47d6-86b8-a63ecdef6943" />
 
 ---
 
@@ -349,16 +379,17 @@ This model helps Noble Equity stop treating every borrower lead the same.
 
 Instead of spending equal time on every application, the company can use dropout probability to prioritize follow-up.
 
-The model can help the business:
+##The model can help the business:
 
 * Focus on stronger borrower leads
-* Reduce wasted follow-up time
+* Reduce wasted follow-up time by up to 30 hours per week
 * Identify weak leads earlier
-* Improve sales team efficiency
-* Improve borrower pipeline quality
-* Support better marketing and intake decisions
+* Improve sales team efficiency with a web application making quick predictions for borrowers found outside the pipeline.
+* Improve borrower pipeline quality by improving loan application questions; this one was huge. 
+* Support better marketing and intake decisions for moving forward.
+* Start implementing this tool for marketing for new leads as well as LOS systems so the team can focus on which leads are likely to close in order to meet Quota. The possibilities are endless!
 
-The main value is that Noble Equity can use data to decide which borrowers deserve more attention.
+The main value is that Noble Equity can use data to decide which borrowers deserve more attention at every stage of the borrower process.
 
 ---
 
@@ -366,14 +397,14 @@ The main value is that Noble Equity can use data to decide which borrowers deser
 
 This project built a Random Forest Classification model to predict borrower fallout for Noble Equity.
 
-The model connected borrower application data to payment outcomes, cleaned messy borrower fields, handled missing values and outliers, and created dropout probability scores. However, we may not have had enough borrowers to obtain an accurate sample of the full population we intended to study. Several lending firms process thousands of loans each month, while a small brokerage like Noble Equity was limited in the number of clients, loan officers, and marketing resources available to collect sufficient data. 
+The model connected borrower application data to payment outcomes, cleaned messy borrower fields, handled missing values and outliers, and created dropout probability scores. However, we may not have had enough borrowers to obtain an accurate sample of the full population we intended to study. The best we could do was bootstrap the data, just duplicating what we already had. Several lending firms process thousands of loans each month, while a small brokerage like Noble Equity was limited in the number of clients, loan officers, and marketing resources available to collect sufficient data. 
 
 In plain English, this project helps Noble Equity answer:
 
 > "Which borrowers are serious, and which borrowers are likely to disappear before paying?"
 
 That makes the project useful for lead scoring, borrower prioritization, sales follow-up, and commercial mortgage pipeline management.
-We will take further action to increase marketing to our ideal clients so we can collect more data and stress-test the model.
+We will take further action to increase marketing to our ideal clients so we can collect more data and stress-test the model in other avenues.
 
 
 
@@ -381,7 +412,9 @@ We will take further action to increase marketing to our ideal clients so we can
 
 ## User-friendly web application!
 
-Borrower Fallout Prediction 
+Borrower Fallout Prediction a user-friendly form that one can enter in and obtain a high or low probability of a client dropping out. 
 
-(<img width="861" height="980" alt="Screenshot 2026-07-08 at 11 01 19 PM" src="https://github.com/user-attachments/assets/45fc5300-6cbf-4f87-a507-fda4c3d1a0f4" />
-")
+## Medium Probability Of Dropout!
+<img width="630" height="1092" alt="image" src="https://github.com/user-attachments/assets/8e606036-5c3a-463e-8bfd-e1168601a4b5" />
+## High Probability of Dropout!
+<img width="657" height="1028" alt="image" src="https://github.com/user-attachments/assets/6b22f1b2-bc72-43e1-a98f-51dd24827d99" />
