@@ -1,11 +1,11 @@
 ---
 layout: post
-title: "Don’t Ghost The Broker: Borrower Fallout Prediction"
+title: "Don’t Ghost The Lender: Borrower Fallout Prediction"
 image: "/posts/borrower_fallout_title_image.jpg"
 tags: [Python, Pandas, Machine Learning, Random Forest, Commercial Lending, Lead Scoring]
 ---
 
-# "Don’t Ghost The Broker" Borrower Fallout Prediction
+# "Don’t Ghost The Lender" Borrower Fallout Prediction
 
 ## Project Overview
 
@@ -19,7 +19,7 @@ The goal of this project was to build a borrower-fallout prediction model that h
 
 In simple terms, the model helps answer the sales team:
 
-> "Which borrowers are worth follow-up, and which borrowers are more likely to ghost the broker?"
+> "Which borrowers are worth follow-up, and which borrowers are more likely to ghost the Lender?"
 
 Answers to stakeholders:
 
@@ -400,7 +400,7 @@ The main value is that Noble Equity can use data to decide which borrowers deser
 
 This project built a Random Forest Classification model to predict borrower fallout for Noble Equity.
 
-The model connected borrower application data to payment outcomes, cleaned messy borrower fields, handled missing values and outliers, and created dropout probability scores. However, we may not have had enough borrowers to obtain an accurate sample of the full population we intended to study. The best we could do was bootstrap the data, just duplicating what we already had. Several lending firms process thousands of loans each month, while a small brokerage like Noble Equity was limited in the number of clients, loan officers, and marketing resources available to collect sufficient data. 
+The model connected borrower application data to payment outcomes, cleaned messy borrower fields, handled missing values and outliers, and created dropout probability scores. However, we may not have had enough borrowers to obtain an accurate sample of the full population we intended to study. The best we could do was bootstrap the data, just duplicating what we already had. Several lending firms process thousands of loans each month, while a small Lenderage like Noble Equity was limited in the number of clients, loan officers, and marketing resources available to collect sufficient data. 
 
 In plain English, this project helps Noble Equity answer:
 
