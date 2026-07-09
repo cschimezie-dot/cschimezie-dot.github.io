@@ -417,10 +417,10 @@ We will take further action to increase marketing to our ideal clients so we can
 
 Borrower Fallout Prediction a user-friendly form that one can enter in and obtain a high or low probability of a client dropping out. 
 
-## Medium Probability Of Dropout!
+## Medium Probability Of Dropout! 👇🏾
 <img width="630" height="1092" alt="image" src="https://github.com/user-attachments/assets/8e606036-5c3a-463e-8bfd-e1168601a4b5" />
 
 
 
-## High Probability of Dropout!
+## High Probability of Dropout!  👇🏾
 <img width="657" height="1028" alt="image" src="https://github.com/user-attachments/assets/6b22f1b2-bc72-43e1-a98f-51dd24827d99" />
