@@ -302,7 +302,11 @@ joblib.dump(
 ## Key Discoveries
 ## Before AI
 <img width="826" height="205" alt="Screenshot 2026-07-08 at 3 15 28 PM" src="https://github.com/user-attachments/assets/aebe7087-8b52-447d-87c1-195bcd897c66" />
+
+
 ## After AI Enhancement
+
+
 <img width="600" height="239" alt="Screenshot 2026-07-09 at 4 48 46 PM" src="https://github.com/user-attachments/assets/cf50b6c0-14ed-4e7e-b2cf-e27303f1491a" />
 
 So after running everything. The first model found that loan amount, credit score, liquidity, and annual income accounted for 40% of borrower dropouts. 12% for the requested loan amount, 10.80% for credit, 10.81% for liquidity, and 10.13% for income. This model achieved an accuracy of about 85% using the F1 score and a confusion matrix. See below; I left that there so you can see. I also ran another model with AI to optimize more items that I thought could have influenced the prediction results. Because I did get alot of overfitting, meaning data leaks, I wanted to make sure the model was properly rinsed.  
