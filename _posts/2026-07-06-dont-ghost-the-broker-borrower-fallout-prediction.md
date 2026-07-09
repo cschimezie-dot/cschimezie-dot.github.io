@@ -373,7 +373,7 @@ In plain English, this project helps Noble Equity answer:
 > "Which borrowers are serious, and which borrowers are likely to disappear before paying?"
 
 That makes the project useful for lead scoring, borrower prioritization, sales follow-up, and commercial mortgage pipeline management.
-We will take further action to focus on increasing marketing for our ideal clients so we can collect more data and stress-test the model.
+We will take further action to increase marketing to our ideal clients so we can collect more data and stress-test the model.
 
 
 
@@ -381,5 +381,7 @@ We will take further action to focus on increasing marketing for our ideal clien
 
 ## User-friendly web application!
 
-![Borrower Fallout Prediction](<img width="861" height="980" alt="Screenshot 2026-07-08 at 11 01 19 PM" src="https://github.com/user-attachments/assets/45fc5300-6cbf-4f87-a507-fda4c3d1a0f4" />
+Borrower Fallout Prediction 
+
+(<img width="861" height="980" alt="Screenshot 2026-07-08 at 11 01 19 PM" src="https://github.com/user-attachments/assets/45fc5300-6cbf-4f87-a507-fda4c3d1a0f4" />
 ")
