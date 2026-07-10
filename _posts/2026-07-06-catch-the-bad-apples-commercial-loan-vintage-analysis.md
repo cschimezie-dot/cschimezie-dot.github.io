@@ -172,11 +172,89 @@ ___
 The final model was a Random Forest Regression model.
 
 ```python
-regressor = RandomForestRegressor(
-    random_state=42
-)
+# Import libraries
+  import pandas as pd
+  import numpy as np
 
-regressor.fit(X_train, y_train)
+  from sklearn.model_selection import train_test_split, cross_val_score
+  from sklearn.ensemble import RandomForestRegressor
+  from sklearn.metrics import r2_score, mean_absolute_error, mean_squared_error
+
+  # Load dataset
+  df = pd.read_excel("data/raw/commercial_vintage_master_dataset.xlsx")
+
+  # Clean missing values
+  df.dropna(inplace=True)
+
+  # Set target variable
+  y = df["Net_Loss_Pct"]
+
+  # Remove target, IDs, and possible leakage columns
+  X = df.drop(
+      [
+          "Net_Loss_Pct",
+          "Snapshot_Date",
+          "Origination_Date",
+          "Loan_ID",
+          "Borrower_ID"
+      ],
+      axis=1
+  )
+
+  # Convert industry text into number columns
+  X = pd.get_dummies(
+      X,
+      columns=["Industry_Sector"],
+      drop_first=True
+  )
+
+  # Split data into training and testing sets
+  X_train, X_test, y_train, y_test = train_test_split(
+      X,
+      y,
+      test_size=0.2,
+      random_state=42
+  )
+
+  # Train Random Forest Regression model
+  rf_model = RandomForestRegressor(
+      random_state=42
+  )
+
+  rf_model.fit(X_train, y_train)
+
+  # Predict Net_Loss_Pct
+  y_pred = rf_model.predict(X_test)
+
+  # Check model performance
+  training_r2 = rf_model.score(X_train, y_train)
+  testing_r2 = rf_model.score(X_test, y_test)
+  r2 = r2_score(y_test, y_pred)
+  mae_percent = mean_absolute_error(y_test, y_pred) * 100
+  rmse_percent = np.sqrt(mean_squared_error(y_test, y_pred)) * 100
+
+  cv_scores = cross_val_score(
+      rf_model,
+      X_train,
+      y_train,
+      cv=5,
+      scoring="r2"
+  )
+
+  # Print results
+  print("Training R2 Score:", training_r2)
+  print("Testing R2 Score:", testing_r2)
+  print("R2 Score:", r2)
+  print("Mean Absolute Error (%):", mae_percent)
+  print("Root Mean Squared Error (%):", rmse_percent)
+  print("Average Cross-Validation Score:", cv_scores.mean())
+
+  # Simple overfitting check
+  if training_r2 - testing_r2 > 0.10:
+      print("Warning: The model may be overfitting.")
+  else:
+      print("The model looks stable.")
+
 ```
 
 I kept the model simple on purpose. I did not add GridSearchCV, advanced pipelines, or classification logic because the goal was a clear, beginner-friendly regression workflow for `Net_Loss_Pct`.
@@ -228,6 +306,9 @@ These signals make business sense. Borrowers with rising credit usage, weaker re
 
 ![Feature Importance](/visuals/feature_importance_chart.png "Random Forest Feature Importance - Net Loss Prediction")
 
+<img width="1200" height="630" alt="feature_importance_chart" src="https://github.com/user-attachments/assets/9ad1fb00-99d6-44fa-acfa-cc0c889cac81" />
+
+
 ___
 
 # Actual vs Predicted Results <a name="actual-vs-predicted"></a>
@@ -238,11 +319,17 @@ The actual vs predicted chart compares the real `Net_Loss_Pct` values against th
 
 ![Actual vs Predicted Net Loss](/visuals/actual_vs_predicted_net_loss.png "Actual vs Predicted Net Loss Percentage")
 
+<img width="1200" height="630" alt="actual_vs_predicted_net_loss" src="https://github.com/user-attachments/assets/29a76046-ea90-480b-a714-5a661648e132" />
+
+
 I also created a regression loss-bucket matrix. Since this is not a classification model, I first grouped actual and predicted values into low, medium, and high loss risk buckets, then compared those buckets.
 
 <br>
 
 ![Loss Bucket Matrix](/visuals/loss_bucket_matrix.png "Regression Loss Risk Bucket Matrix")
+
+
+<img width="1200" height="630" alt="loss_bucket_matrix" src="https://github.com/user-attachments/assets/d98ea0cd-6769-4252-a45b-d4f8198cbc12" />
 
 ___
 
@@ -260,11 +347,18 @@ These vintages would be good candidates for deeper review by a commercial credit
 
 ![Vintage Performance](/visuals/vintage_performance_chart.png "Average Net Loss by Loan Vintage")
 
+
+<img width="1200" height="630" alt="vintage_performance_chart" src="https://github.com/user-attachments/assets/4483c28a-b872-4947-b460-63fa68cdfe46" />
+
+
 Months-on-book analysis also showed that losses were not perfectly flat across loan age. This supports the value of monitoring seasoning patterns over time.
 
 <br>
 
 ![Months On Book Loss](/visuals/months_on_book_loss_chart.png "Average Net Loss by Months On Book")
+
+
+<img width="1200" height="630" alt="months_on_book_loss_chart" src="https://github.com/user-attachments/assets/eb77bf26-c53d-4646-b3ce-ed98dcca9771" />
 
 ___
 
