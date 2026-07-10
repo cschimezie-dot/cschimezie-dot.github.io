@@ -445,6 +445,6 @@ These improvements would make the analysis more realistic and more useful for a 
 
  # Streamlit App View
 
-  <img width="752" height="664" alt="Screenshot 2026-07-10 at 12 02 30 PM" src="https://github.com/user-attachments/assets/67a4ac47-6ea2-43d3-a9e9-0607fb7b1bcf" />
+  <img width="1200" height="664" alt="Screenshot 2026-07-10 at 12 02 30 PM" src="https://github.com/user-attachments/assets/67a4ac47-6ea2-43d3-a9e9-0607fb7b1bcf" />
 
 
