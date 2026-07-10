@@ -304,7 +304,7 @@ These signals make business sense. Borrowers with rising credit usage, weaker re
 
 <br>
 
-![Feature Importance](/visuals/feature_importance_chart.png "Random Forest Feature Importance - Net Loss Prediction")
+![Feature Importance]
 
 <img width="1200" height="630" alt="feature_importance_chart" src="https://github.com/user-attachments/assets/9ad1fb00-99d6-44fa-acfa-cc0c889cac81" />
 
@@ -317,7 +317,7 @@ The actual vs predicted chart compares the real `Net_Loss_Pct` values against th
 
 <br>
 
-![Actual vs Predicted Net Loss](/visuals/actual_vs_predicted_net_loss.png "Actual vs Predicted Net Loss Percentage")
+![Actual vs Predicted Net Loss]
 
 <img width="1200" height="630" alt="actual_vs_predicted_net_loss" src="https://github.com/user-attachments/assets/29a76046-ea90-480b-a714-5a661648e132" />
 
@@ -326,7 +326,7 @@ I also created a regression loss-bucket matrix. Since this is not a classificati
 
 <br>
 
-![Loss Bucket Matrix](/visuals/loss_bucket_matrix.png "Regression Loss Risk Bucket Matrix")
+![Loss Bucket Matrix]
 
 
 <img width="1200" height="630" alt="loss_bucket_matrix" src="https://github.com/user-attachments/assets/d98ea0cd-6769-4252-a45b-d4f8198cbc12" />
@@ -345,7 +345,7 @@ These vintages would be good candidates for deeper review by a commercial credit
 
 <br>
 
-![Vintage Performance](/visuals/vintage_performance_chart.png "Average Net Loss by Loan Vintage")
+![Vintage Performance]
 
 
 <img width="1200" height="630" alt="vintage_performance_chart" src="https://github.com/user-attachments/assets/4483c28a-b872-4947-b460-63fa68cdfe46" />
@@ -355,7 +355,7 @@ Months-on-book analysis also showed that losses were not perfectly flat across l
 
 <br>
 
-![Months On Book Loss](/visuals/months_on_book_loss_chart.png "Average Net Loss by Months On Book")
+![Months On Book Loss]
 
 
 <img width="1200" height="630" alt="months_on_book_loss_chart" src="https://github.com/user-attachments/assets/eb77bf26-c53d-4646-b3ce-ed98dcca9771" />
