@@ -1,49 +1,107 @@
 ---
 layout: post
 title: "Catch The Bad Apples: Commercial Loan Vintage Risk Analysis"
-image: "/posts/apples_in_a_wooden_bowl_still_life.jpg"
-tags: [Python, Pandas, Machine Learning, Random Forest, Commercial Lending, Risk Analytics]
+image: "/visuals/feature_importance_chart.png"
+tags: [Python, Pandas, Machine Learning, Random Forest, Commercial Lending, Credit Risk, Vintage Analysis]
 ---
 
-# "Catch The Bad Apples" Commercial Loan Vintage Risk Analysis
+In this project, I built a commercial lending risk analytics workflow to predict net loss percentage and identify weak commercial loan vintages before losses become harder to control.
 
-## Project Overview
+# Table of contents
 
-This project focused on one simple business question:
+- [00. Project Overview](#overview-main)
+    - [Context](#overview-context)
+    - [Actions](#overview-actions)
+    - [Results](#overview-results)
+    - [Growth/Next Steps](#overview-growth)
+- [01. Business Problem](#business-problem)
+- [02. Dataset Used](#dataset-used)
+- [03. Tools Used](#tools-used)
+- [04. Data Cleaning and Preparation](#data-cleaning)
+- [05. Model Building Process](#model-building)
+- [06. Model Validation](#model-validation)
+- [07. Feature Importance Findings](#feature-importance)
+- [08. Actual vs Predicted Results](#actual-vs-predicted)
+- [09. Vintage Performance Findings](#vintage-performance)
+- [10. Business Impact](#business-impact)
+- [11. Final Business Summary](#final-summary)
+- [12. What I Would Improve Next](#next-steps)
 
-**Which groups of commercial loans are starting to perform badly, and can we spot the warning signs earlier?**
+___
 
-In commercial lending, lenders do not care only about whether a loan is good or bad. They also care about **loan vintages**. A loan vintage is a group of loans that started around the same time. If one batch of loans begins showing higher losses than the others, the lender needs to know why.
+# Project Overview <a name="overview-main"></a>
 
-For this project, I built a machine learning model to predict **Net Loss Percentage** from commercial loan records. The goal was to help a lender identify borrower, credit, and portfolio signals connected to higher loan losses.
+### Context <a name="overview-context"></a>
 
-In simple terms, this model helps answer:
+Commercial lenders need to understand which loan batches are starting to weaken. A single loan may not tell the full story, but a loan vintage can show whether a group of loans originated around the same time is performing worse than expected.
 
-> "Which loans look like bad apples before they spoil the whole portfolio?"
+This project uses synthetic commercial lending data to predict `Net_Loss_Pct`, a continuous loss percentage field. Because the target is numeric, I used a **Random Forest Regression** model instead of a classification model.
 
----
+<br>
 
-## Business Problem
+### Actions <a name="overview-actions"></a>
 
-Commercial lenders can lose money when weak loans are found too late. A borrower may look fine at origination, but later the loan can weaken due to revenue declines, higher credit utilization, seasoning, changes in borrower risk, or industry stress.
+I cleaned the loan data, removed ID and date columns that could confuse the model, encoded the industry field, trained a Random Forest Regression model, and created validation checks to compare training and testing performance.
 
-The business problem was to create a model that could help lenders:
+The workflow also produced:
 
-* Detect weak loan batches earlier
-* Identify borrower characteristics tied to higher losses
-* Monitor portfolio risk across loan origination periods
-* Reduce underwriting blind spots
-* Improve credit monitoring before losses become larger
+* Model results summary
+* Feature importance table
+* Permutation importance table
+* Actual vs predicted chart
+* Regression loss-bucket matrix
+* Vintage performance summary
+* Months-on-book loss summary
+* Saved model and model column files
 
-This is important because a lender does not want to wait until a loan fully defaults before noticing the warning signs.
+<br>
 
----
+### Results <a name="overview-results"></a>
 
-## Dataset Used
+The model produced a strong test R² score of `0.9630`, with an average cross-validation score of `0.9611`.
 
-The project used an AI-generated dataset of commercial loan vintages with loan- and borrower-level information.
+| Metric | Score |
+|---|---:|
+| R² Score | 0.9630 |
+| Mean Absolute Error (%) | 0.2665 |
+| Root Mean Squared Error (%) | 0.7381 |
+| Average Cross-Validation Score | 0.9611 |
 
-The dataset included columns such as:
+The basic overfitting check showed:
+
+| Metric | Score |
+|---|---:|
+| Training R² Score | 0.9945 |
+| Testing R² Score | 0.9630 |
+| Difference | 0.0315 |
+
+The training and testing scores are close, so the model looks stable from a basic overfitting check. However, the score is still very high, so I would review the data for leakage before treating this as a real credit model.
+
+<br>
+
+### Growth/Next Steps <a name="overview-growth"></a>
+
+This project is portfolio-grade, not production-ready. The next step would be to test the workflow with real commercial lending data, stronger time-based validation, delinquency history, collateral fields, macroeconomic variables, and a deeper leakage review.
+
+___
+
+# Business Problem <a name="business-problem"></a>
+
+Commercial lenders can lose money when weak borrowers or weak loan batches are found too late. Revenue declines, credit utilization spikes, seasoning, and borrower risk ratings can all signal stress before losses become obvious.
+
+The business problem was:
+
+> Can we predict commercial loan net loss percentage and identify the loan vintages or borrower signals connected to higher loss risk?
+
+The goal was not just to build a model. The goal was to create a risk analytics workflow that helps a credit team ask better questions about portfolio performance.
+
+___
+
+# Dataset Used <a name="dataset-used"></a>
+
+The project uses `commercial_vintage_master_dataset.xlsx`, a synthetic commercial lending dataset with loan snapshot records.
+
+The dataset includes:
 
 * `Loan_ID`
 * `Borrower_ID`
@@ -60,317 +118,190 @@ The dataset included columns such as:
 * `Revenue_Drop_20Pct`
 * `Net_Loss_Pct`
 
-The target column was:
+The target variable was:
 
 ```text
 Net_Loss_Pct
 ```
 
-That means the model was trained to predict the percentage loss associated with each loan record.
+This is a continuous value, which is why regression was the correct modeling approach.
 
----
+___
 
-## Tools Used
+# Tools Used <a name="tools-used"></a>
 
 * Python
-* ChatGPT 
 * Pandas
 * NumPy
+* Matplotlib
 * Scikit-learn
 * Random Forest Regression
-* Train/Test Split
-* Cross Validation
-* Feature Importance
-* Joblib / Pickle-style model saving
+* Cross-validation
+* Feature importance
+* Permutation importance
+* Pickle model saving
 
----
+___
 
-## Data Cleaning and Preparation
+# Data Cleaning and Preparation <a name="data-cleaning"></a>
 
-Before training the model, I cleaned and prepared the data so the model could understand it properly.
+The main preparation steps were:
 
-##The main preparation steps were:
+1. Loaded the commercial loan vintage dataset
+2. Checked rows, columns, data types, and missing values
+3. Removed missing records
+4. Checked outliers in loan amount, current balance, and annual revenue
+5. Removed leakage and identifier columns
+6. One-hot encoded `Industry_Sector`
+7. Split the data into training and testing sets
 
-1. Loaded the AI-generated commercial loan vintage dataset
-2. Checked rows, columns, and missing values
-3. Removed ID columns that should not be used for prediction
-4. Removed raw date columns that caused model errors
-5. Converted categorical fields like `Industry_Sector` into numeric dummy variables
-6. Split the data into `X` features and `y` target
-7. Used a train/test split to test the model fairly
-8. Model Validation to ensure accuracy. 
+The leakage columns removed from the model features were:
 
-One important lesson from this project was that raw date and ID columns can break or mislead a model. The model should learn from business features, not from meaningless identifiers.
+* `Net_Loss_Pct`
+* `Snapshot_Date`
+* `Origination_Date`
+* `Loan_ID`
+* `Borrower_ID`
 
----
+This keeps the model focused on business signals rather than IDs, raw dates, or the answer column.
 
-## Python Code
+___
 
-```python
-# =============================================================================
-# 1. Import Libraries
-# =============================================================================
+# Model Building Process <a name="model-building"></a>
 
-import pandas as pd
-import numpy as np
-
-from sklearn.model_selection import train_test_split, cross_val_score
-from sklearn.ensemble import RandomForestRegressor
-from sklearn.metrics import r2_score, mean_absolute_error, mean_squared_error
-
-import joblib
-```
+The final model was a Random Forest Regression model.
 
 ```python
-# =============================================================================
-# 2. Load Dataset
-# =============================================================================
-
-commercial_vintage = pd.read_excel(
-    "commercial_vintage_master_dataset.xlsx"
-)
-
-# Loads the commercial loan vintage dataset
-```
-
-```python
-# =============================================================================
-# 3. Inspect Dataset
-# =============================================================================
-
-commercial_vintage.head()
-
-commercial_vintage.info()
-
-commercial_vintage.isna().sum()
-
-# Checks the structure, data types, and missing values
-```
-
-```python
-# =============================================================================
-# 4. Define Target
-# =============================================================================
-
-y = commercial_vintage["Net_Loss_Pct"]
-
-# y is the value we want the model to predict
-```
-
-```python
-# =============================================================================
-# 5. Create X Features
-# =============================================================================
-
-X = commercial_vintage.drop(
-    columns=[
-        "Net_Loss_Pct",
-        "Loan_ID",
-        "Borrower_ID",
-        "Snapshot_Date",
-        "Origination_Date"
-    ]
-)
-
-# Removes the target, IDs, and raw date columns
-# Keeps business features the model can learn from
-```
-
-```python
-# =============================================================================
-# 6. One-Hot Encode Categorical Features
-# =============================================================================
-
-X = pd.get_dummies(
-    X,
-    columns=["Industry_Sector"],
-    drop_first=True
-)
-
-# Converts industry sector text into numeric columns
-```
-
-```python
-# =============================================================================
-# 7. Train Test Split
-# =============================================================================
-
-X_train, X_test, y_train, y_test = train_test_split(
-    X,
-    y,
-    test_size=0.2,
+regressor = RandomForestRegressor(
     random_state=42
 )
 
-# Splits data into training and testing sets
+regressor.fit(X_train, y_train)
 ```
 
-```python
-# =============================================================================
-# 8. Train Random Forest Regression Model
-# =============================================================================
+I kept the model simple on purpose. I did not add GridSearchCV, advanced pipelines, or classification logic because the goal was a clear, beginner-friendly regression workflow for `Net_Loss_Pct`.
 
-vintage_model = RandomForestRegressor(
-    n_estimators=300,
-    random_state=42,
-    n_jobs=-1
-)
+___
 
-vintage_model.fit(X_train, y_train)
+# Model Validation <a name="model-validation"></a>
 
-# Trains the model
-```
+The model was evaluated with:
 
-```python
-# =============================================================================
-# 9. Make Predictions
-# =============================================================================
+* Training R² score
+* Testing R² score
+* R² score
+* Mean absolute error
+* Root mean squared error
+* Cross-validation score
 
-y_pred = vintage_model.predict(X_test)
+The model results were:
 
-# Predicts net loss percentage on unseen test data
-```
+| Metric | Score |
+|---|---:|
+| R² Score | 0.9630 |
+| Mean Absolute Error (%) | 0.2665 |
+| Root Mean Squared Error (%) | 0.7381 |
+| Average Cross-Validation Score | 0.9611 |
 
-```python
-# =============================================================================
-# 10. Evaluate Model
-# =============================================================================
+The overfitting check compared training and testing R²:
 
-r2 = r2_score(y_test, y_pred)
+* Training R² Score: `0.9945`
+* Testing R² Score: `0.9630`
+* Difference: `0.0315`
 
-mae = mean_absolute_error(y_test, y_pred)
+Because the gap is not large, the model looks stable from a simple overfitting check. Still, the performance is unusually strong, so a deeper leakage review would be important before using this type of model in a real credit environment.
 
-rmse = np.sqrt(mean_squared_error(y_test, y_pred))
+___
 
-print("R2 Score:", r2)
-print("Mean Absolute Error:", mae)
-print("Root Mean Squared Error:", rmse)
+# Feature Importance Findings <a name="feature-importance"></a>
 
-# R2 shows how much of the loss pattern the model explains
-# MAE and RMSE show average prediction error
-```
+The strongest Random Forest feature importance signals were:
 
-```python
-# =============================================================================
-# 11. Cross Validation
-# =============================================================================
+* `Credit_Utilization_Spike`
+* `Original_Internal_Risk_Rating`
+* `Revenue_Drop_20Pct`
+* `Months_On_Book`
 
-cv_scores = cross_val_score(
-    vintage_model,
-    X,
-    y,
-    cv=5,
-    scoring="r2"
-)
+These signals make business sense. Borrowers with rising credit usage, weaker revenue, higher internal risk ratings, and longer seasoning can show higher loss risk.
 
-print("Cross Validation Scores:", cv_scores)
-print("Average CV Score:", cv_scores.mean())
+<br>
 
-# Tests the model across multiple splits of the data
-```
+![Feature Importance](/visuals/feature_importance_chart.png "Random Forest Feature Importance - Net Loss Prediction")
 
-```python
-# =============================================================================
-# 12. Feature Importance
-# =============================================================================
+___
 
-feature_importance = pd.DataFrame({
-    "feature": X.columns,
-    "importance": vintage_model.feature_importances_
-}).sort_values(
-    by="importance",
-    ascending=False
-)
+# Actual vs Predicted Results <a name="actual-vs-predicted"></a>
 
-feature_importance.head(20)
+The actual vs predicted chart compares the real `Net_Loss_Pct` values against the model predictions. Points close to the red diagonal line are better predictions.
 
-# Shows which features were most important to the model
-```
+<br>
 
-```python
-# =============================================================================
-# 13. Save Model
-# =============================================================================
+![Actual vs Predicted Net Loss](/visuals/actual_vs_predicted_net_loss.png "Actual vs Predicted Net Loss Percentage")
 
-joblib.dump(
-    vintage_model,
-    "commercial_loan_vintage_random_forest_model.pkl"
-)
+I also created a regression loss-bucket matrix. Since this is not a classification model, I first grouped actual and predicted values into low, medium, and high loss risk buckets, then compared those buckets.
 
-joblib.dump(
-    X.columns.tolist(),
-    "commercial_loan_vintage_model_columns.pkl"
-)
+<br>
 
-# Saves the model and column order for future use
-```
+![Loss Bucket Matrix](/visuals/loss_bucket_matrix.png "Regression Loss Risk Bucket Matrix")
 
----
+___
 
-## Key Discoveries
+# Vintage Performance Findings <a name="vintage-performance"></a>
 
-The model was useful because it showed that commercial loan losses are not random. Certain borrower and portfolio patterns can signal higher risk.
+The highest average-loss vintages in this run included:
 
-The most important warning signs to monitor were:
+* `2024-08-01`
+* `2023-06-01`
+* `2024-04-01`
 
-* **Revenue deterioration** - borrowers with major revenue drops were more likely to show loss pressure, possibly due to stressful situations.
-* **Credit utilization spikes** - borrowers using more available credit may be under financial stress.
-* **Loan seasoning** - loans can behave differently depending on how many months they have been active.
-* **Current balance exposure** - larger remaining balances can create larger portfolio risk.
-* **Internal risk rating** - higher-risk borrower ratings can help explain future loss behavior.
-* **Industry sector** - some industries may show more weakness than others during stressed periods.
+These vintages would be good candidates for deeper review by a commercial credit or portfolio monitoring team.
 
-The main discovery was that lenders can use predictive analytics to identify weak loan batches before losses fully materialize.
+<br>
 
----
+![Vintage Performance](/visuals/vintage_performance_chart.png "Average Net Loss by Loan Vintage")
 
-## Business Impact
+Months-on-book analysis also showed that losses were not perfectly flat across loan age. This supports the value of monitoring seasoning patterns over time.
 
-This project shows how a lender could use machine learning to improve commercial credit monitoring.
+<br>
 
-Instead of waiting for losses to appear, the lender could use the model to score loans earlier and flag risky vintages for review.
+![Months On Book Loss](/visuals/months_on_book_loss_chart.png "Average Net Loss by Months On Book")
 
-The model can support:
+___
 
-* Better portfolio monitoring
-* Earlier risk detection
-* Smarter credit review meetings
-* More focused borrower follow-up
-* Better underwriting feedback
-* Stronger vintage performance analysis
+# Business Impact <a name="business-impact"></a>
 
-The business value is that lenders can act earlier. If a batch of loans is showing warning signs, the credit team can investigate before the problem gets bigger.
+This project shows how commercial lenders could use a regression model and vintage analysis to support portfolio monitoring.
 
----
+The workflow can help a credit team:
 
-## Final Business Summary
+* Identify weaker loan vintages
+* Understand which borrower signals are driving loss risk
+* Focus reviews on loans with stronger warning signs
+* Monitor portfolio seasoning
+* Improve underwriting feedback loops
 
-This project built a Random Forest Regression model to predict net loss percentage across commercial loan vintages. The model used borrower, loan, revenue, utilization, industry, and seasoning data to identify signals connected to weaker portfolio performance.
+The model should not be treated as production-ready. It is a polished portfolio project that demonstrates credit risk analytics, regression modeling, and business interpretation.
 
-In plain English, the model helps lenders find the bad apples in the loan portfolio earlier.
+___
 
-That means the lender can spot risky batches, understand what is driving poor performance, and improve credit monitoring before losses become harder to control.
+# Final Business Summary <a name="final-summary"></a>
 
----
+This project built a Random Forest Regression model to predict commercial loan `Net_Loss_Pct`. The strongest signals were credit utilization spikes, original internal risk rating, revenue drops, and months on book.
 
-## What I Would Improve Next
+In business terms, the model helps identify the bad apples in a commercial loan portfolio earlier. A lender could use this type of workflow to review risky vintages, investigate borrower stress signals, and improve portfolio monitoring before losses become larger.
 
-If this project were expanded, I would add:
+___
 
-1. More borrower payment history
-2. Macroeconomic indicators
-3. Collateral/property-level data
-4. Delinquency history
-5. Vintage-level dashboard visuals
-6. Probability bands for low, medium, and high loss risk
-7. Accuracy scoring, using real data sets for better authenticity 
+# What I Would Improve Next <a name="next-steps"></a>
 
-This would make the model even more useful for real-world portfolio management.
+If I expanded this project, I would add:
 
----
+1. Real commercial lending data
+2. Time-based validation
+3. Delinquency and payment history
+4. Collateral and loan purpose details
+5. Macroeconomic indicators
+6. A dashboard for vintage monitoring
+7. A deeper leakage review with credit risk stakeholders
 
-## Portfolio Image
-
-![Commercial Loan Vintage Analysis](/img/posts/commercial_loan_vintage_bad_apples.png "Catch The Bad Apples - Commercial Loan Vintage Analysis")
-
----
+These improvements would make the analysis more realistic and more useful for a real commercial lending environment.
