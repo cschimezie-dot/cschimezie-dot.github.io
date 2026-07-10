@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Catch The Bad Apples: Commercial Loan Vintage Risk Analysis"
-image: "/visuals/feature_importance_chart.png"
+image: "/posts/apples_in_a_wooden_bowl_still_life.jpg"
 tags: [Python, Pandas, Machine Learning, Random Forest, Commercial Lending, Credit Risk, Vintage Analysis]
 ---
 
