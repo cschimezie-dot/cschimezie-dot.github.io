@@ -53,7 +53,7 @@ We built a full end-to-end RAG system that:
 * Created dense vector embeddings  
 * Stored these embeddings in a persistent vector database  
 * Retrieved only the most relevant content at query time  
-* Generated answers grounded strictly in this retrieved context  
+* Used an OpenAI language model to generate answers strictly grounded in this retrieved context to avoid hallucinations.  
 
 We also extended the project with **conversational memory**, enabling more natural multi-turn interactions while ensuring the assistant never hallucinates.
 
