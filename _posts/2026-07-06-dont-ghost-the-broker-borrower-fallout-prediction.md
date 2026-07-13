@@ -521,9 +521,48 @@ ___
 
 # 17. Web Application <a name="web-application"></a>
 
-The local Streamlit app is a proof-of-concept interface for stakeholder scoring. It should load the saved model package, collect borrower inputs, create a single-row DataFrame with the model feature names, and return a dropout or completion probability.
+## Interactive Borrower Risk App Server: http://localhost:8501/
 
-The app should not retrain the model. It should only perform inference.
+  To make the model easier to use, I also built a local Streamlit app that turns the final Part 2 model into a simple
+  borrower-risk scoring tool. If the link is not working, you can reach me so we can get it live for you to test. I left an image below for you to view.
+
+  Instead of reading model outputs from a CSV, a stakeholder can enter borrower details directly into a form, including
+  loan amount, credit score, liquidity, annual income, real estate experience, financing type, property category, and
+  state region. The app then creates the same single-row model input used during training, passes it through the saved
+  Random Forest model, and returns two clear scores:
+
+  - Dropout probability: the estimated chance that the borrower will apply but not pay the application fee.
+  - Completion probability: the estimated chance that the borrower will continue by paying the application fee.
+
+  The app also converts the score into a simple risk bucket:
+
+   Dropout Probability    Risk Bucket            Recommended Action
+  ━━━━━━━━━━━━━━━━━━━━━  ━━━━━━━━━━━━━━━━━━━━━  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   Below 50%              Low Dropout Risk       Keep the application call-to-action visible and avoid unnecessary
+                                                 interruption.
+  ─────────────────────  ─────────────────────  ────────────────────────────────────────────────────────────────────────
+   50% to 79.99%          Medium Dropout Risk:    Show reassurance, a document checklist, or a borrower success story.
+  ─────────────────────  ─────────────────────  ────────────────────────────────────────────────────────────────────────
+   80% or higher          High Dropout Risk:      Trigger proactive broker outreach, chat support, or an FAQ prompt.
+
+  This makes the model more useful for non-technical stakeholders because the output is not just a prediction. It gives
+  a probability, a plain-English risk label, and a recommended next action.
+
+  For example, a borrower with stronger credit, higher income, stronger liquidity, and more real estate experience may
+  receive a lower dropout probability. A borrower with weaker financial signals or less experience may receive a higher
+  dropout probability. These patterns are not treated as business rules by themselves, but they help the team decide
+  where follow-up support may be most useful.
+
+  The app is inference-only. It loads the saved model package and does not retrain or refit the model inside the app.
+
+  A shorter standout line you can place near the top:
+
+  I also turned the final model into a local Streamlit decision-support app, allowing a broker or stakeholder to enter
+  borrower details and instantly receive a dropout probability, completion probability, risk bucket, and recommended
+  follow-up action.
+
+<img width="619" height="1038" alt="Screenshot 2026-07-13 at 6 40 10 AM" src="https://github.com/user-attachments/assets/07575754-8f60-46f4-b6ea-70870b8d825f" />
+
 
 ___
 
